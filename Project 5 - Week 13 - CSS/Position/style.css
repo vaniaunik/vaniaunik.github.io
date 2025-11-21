@@ -1,0 +1,29 @@
+.relative-container {
+    background-color: lightcoral;
+    width: 300px;
+    height: 300px;
+    position: relative;
+    left: 30px;
+    top: 30px;
+    font-size: 100px;
+
+}
+
+.fixed-container {
+    background-color: lightblue;
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    font-size: 100px;
+
+}
+
+.sticky-container {
+    background-color: lightgreen;
+    position: sticky;
+    font-size: 100px;
+    top: 100px;
+
+}

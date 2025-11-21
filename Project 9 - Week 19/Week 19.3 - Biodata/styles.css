@@ -1,0 +1,11 @@
+.table, th, td {
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.img src {
+    width: 20px;
+    height: 40px;
+    padding: 20px;
+}

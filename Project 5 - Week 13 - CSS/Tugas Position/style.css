@@ -1,0 +1,35 @@
+.fixed-container1{
+    background-color: purple;
+    width: 110px;
+    height: 100px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    font-size: 20px;
+    border-radius: 20px;
+    color: white;
+}
+
+.fixed-container2{
+    background-color: purple;
+    width: 260px;
+    height: 30px;
+    position: fixed;
+    left: 30px;
+    bottom: 30px;
+    font-size: 20px;
+    border-radius: 20px;
+    color: white;
+    
+}
+
+.sticky-container {
+    background-color: purple;
+    position: sticky;
+    font-size: 20px;
+    top: 0px;
+    border-radius: 20px;
+    color: white;
+    text-align: center;
+
+}

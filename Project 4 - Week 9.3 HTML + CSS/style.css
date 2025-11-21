@@ -1,0 +1,20 @@
+body {
+    font-family:Helvetica;
+    color:aliceblue;
+    background-color:rgba(255, 145, 0, 0.733);
+    font-size:50px;
+}
+
+.georgiaParagraph {
+    font-family:Georgia;
+    color:rgb(53, 255, 2);
+    padding: 5px;
+    border-radius: 30px;
+}
+
+.tahomaParagraph {
+    font-family:Tahoma;
+    color:rgb(105, 92, 221);
+    padding: 5px;
+    border-radius: 30px;
+}

@@ -1,0 +1,40 @@
+.box1{
+    background-color:aqua;
+    margin: 50px 20px 10px 5px;
+    
+}
+
+.box2{
+    background-color:crimson;
+    width: 200px;
+    height: 200px;
+    padding: 0px 50px 0px 0px;
+    
+}
+
+.main-div{
+    margin-top: 10px;
+    background-color: lightblue;
+    width: 500px;
+    height: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 0px 50px 0px;
+}
+
+.secondary-div{
+    background-color: red;
+    width: 200px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.inner-div{
+    background-color: yellow;
+    width: 150px;
+    height: 300px;
+    margin: 20px;
+}
