@@ -21,38 +21,38 @@ class UsersManagementPage(tk.Frame):
         tk.Label(
             navbar, text="𝓥LIBRARY",
             bg=COLOR_PRIMARY, fg="white", font=("Linux Libertine G", 14, "bold")
-        ).pack(side="left", padx=20)
+        ).pack(side="top", padx=20)
 
-        nav_left = tk.Frame(navbar, bg=COLOR_PRIMARY)
-        nav_left.pack(side="left", padx=10)
+        sidebar_frame = tk.Frame(self, bg=COLOR_PRIMARY, width=200)
+        sidebar_frame.pack(side="left", fill="y")
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="Booklist", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("BookManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="Borrow", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("BorrowingManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_ACCENT, bg_hover=COLOR_ACCENT_DARK,
+            sidebar_frame, bg_normal=COLOR_ACCENT, bg_hover=COLOR_ACCENT_DARK,
             text="User", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("UsersManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="Blog", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("HomePage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         self.nav_right = tk.Frame(navbar, bg=COLOR_PRIMARY)
         self.nav_right.pack(side="right", padx=20)
@@ -63,13 +63,13 @@ class UsersManagementPage(tk.Frame):
         self.user_label.pack(side="left", padx=(0, 12))
 
         HoverButton(
-            self.nav_right, bg_normal="#c0392b", bg_hover="#a93226",
+            self.nav_right, bg_normal="#A14646", bg_hover="#A14646",
             text="Logout", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2", command=controller.logout
-        ).pack(side="left")
+        ).pack(side="top")
 
         content = tk.Frame(self, bg=COLOR_BG)
-        content.pack(fill="both", expand=True, padx=25, pady=18)
+        content.pack(fill="x", expand=True, padx=25, pady=18)
 
         tk.Label(
             content, text="User Management",

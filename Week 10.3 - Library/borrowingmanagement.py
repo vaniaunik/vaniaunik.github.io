@@ -22,41 +22,41 @@ class BorrowingManagementPage(tk.Frame):
         tk.Label(
             navbar, text="𝓥LIBRARY",
             bg=COLOR_PRIMARY, fg="white", font=("Linux Libertine G", 14, "bold")
-        ).pack(side="left", padx=20)
+        ).pack(side="top", padx=20)
 
-        nav_left = tk.Frame(navbar, bg=COLOR_PRIMARY)
-        nav_left.pack(side="left", padx=10)
+        sidebar_frame = tk.Frame(self, bg=COLOR_PRIMARY, width=200)
+        sidebar_frame.pack(side="left", fill="y")
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="Booklist", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("BookManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_ACCENT, bg_hover=COLOR_ACCENT_DARK,
+            sidebar_frame, bg_normal=COLOR_ACCENT, bg_hover=COLOR_ACCENT_DARK,
             text="Borrow", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("BorrowingManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="User", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("UsersManagementPage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         HoverButton(
-            nav_left, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
+            sidebar_frame, bg_normal=COLOR_PRIMARY, bg_hover="#34495e",
             text="Blog", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2",
             command=lambda: controller.show_frame("HomePage")
-        ).pack(side="left", padx=4)
+        ).pack(side="top", padx=4)
 
         self.nav_right = tk.Frame(navbar, bg=COLOR_PRIMARY)
-        self.nav_right.pack(side="right", padx=20)
+        self.nav_right.pack(side="left", padx=20)
 
         self.user_label = tk.Label(
             self.nav_right, text="", bg=COLOR_PRIMARY, fg="white", font=FONT_NAV
@@ -67,10 +67,10 @@ class BorrowingManagementPage(tk.Frame):
             self.nav_right, bg_normal="#A14646", bg_hover="#A14646",
             text="Logout", fg="white", font=FONT_NAV, bd=0, padx=14, pady=6,
             cursor="hand2", command=controller.logout
-        ).pack(side="left")
+        ).pack(side="top")
 
         content = tk.Frame(self, bg=COLOR_BG)
-        content.pack(fill="both", expand=True, padx=25, pady=18)
+        content.pack(fill="x", expand=True, padx=25, pady=18)
 
         tk.Label(
             content, text="Borrow Management",
@@ -87,7 +87,7 @@ class BorrowingManagementPage(tk.Frame):
         form.grid(row=0, column=0, sticky="ns", padx=(0, 16))
 
         tk.Label(form, text="Borrowing Form", bg=COLOR_CARD, fg=COLOR_TEXT,
-                 font=("Segoe UI", 13, "bold")).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 12))
+                 font=("Linux Libertine G", 13, "bold")).grid(row=0, column=0, columnspan=2, sticky="w", pady=(0, 12))
 
         tk.Label(form, text="Username", bg=COLOR_CARD, fg=COLOR_TEXT,
                  font=FONT_LABEL).grid(row=1, column=0, columnspan=2, sticky="w")
@@ -258,7 +258,7 @@ class BorrowingManagementPage(tk.Frame):
 
     def handle_update(self):
         if self.selected_id is None:
-            messagebox.showwarning("Belum dipilih", "Choose the data on the table first")
+            messagebox.showwarning("Not Chosen", "Choose the data on the table first")
             return
         username = self.entry_username.get().strip()
         book_id = self.get_selected_book_id()
@@ -279,25 +279,25 @@ class BorrowingManagementPage(tk.Frame):
 
     def handle_delete(self):
         if self.selected_id is None:
-            messagebox.showwarning("Belum dipilih", "Choose the data on the table first")
+            messagebox.showwarning("Not Chosen", "Choose the data on the table first")
             return
-        confirm = messagebox.askyesno("Konfirmasi", "Yakin ingin menghapus data ini?")
+        confirm = messagebox.askyesno("Confirm", "Sure you want to delete this data?")
         if not confirm:
             return
         success, message = delete_borrowing(self.selected_id)
         if success:
-            messagebox.showinfo("Berhasil", message)
+            messagebox.showinfo("Succeed", message)
             self.refresh_books()
             self.clear_fields()
             self.refresh_table()
         else:
-            messagebox.showerror("Gagal", message)
+            messagebox.showerror("Failed", message)
 
     def clear_fields(self):
         self.selected_id = None
         self.entry_pinjam.delete(0, tk.END)
         self.entry_kembali.delete(0, tk.END)
-        self.combo_status.set("Dipinjam")
+        self.combo_status.set("Borrowed")
         selection = self.tree.selection()
         if selection:
             self.tree.selection_remove(selection)

@@ -93,37 +93,37 @@ def register_user(username: str, email: str, password: str) -> tuple[bool, str]:
 def verify_login(username: str, password: str) -> tuple[bool, str]:
     users = load_users()
     if username not in users:
-        return False, "Username tidak ditemukan."
+        return False, "Username not found"
     if users[username]["password"] != hash_password(password):
-        return False, "Password salah."
-    return True, "Login berhasil!"
+        return False, "Wrong password"
+    return True, "Login succeed!"
 
 
 def delete_user(username: str) -> tuple[bool, str]:
     users = load_users()
     if username not in users:
-        return False, "User tidak ditemukan."
+        return False, "User not found"
     del users[username]
     save_users(users)
-    return True, "User berhasil dihapus."
+    return True, "User has been delete"
 
 
 def update_user(old_username: str, new_username: str, email: str, new_password: str = "") -> tuple[bool, str]:
     users = load_users()
     if old_username not in users:
-        return False, "User tidak ditemukan."
+        return False, "User not found"
     if new_username != old_username and new_username in users:
-        return False, "Username baru sudah dipakai user lain."
+        return False, "Username has been used by other"
     for uname, data in users.items():
         if uname != old_username and data.get("email", "").lower() == email.lower():
-            return False, "Email sudah dipakai user lain."
+            return False, "Email has been used by other"
     record = users.pop(old_username)
     record["email"] = email
     if new_password:
         record["password"] = hash_password(new_password)
     users[new_username] = record
     save_users(users)
-    return True, "User berhasil diperbarui."
+    return True, "User update successfully"
 
 
 def load_books() -> list:
@@ -154,35 +154,35 @@ def get_next_book_id(books: list) -> int:
 def add_book(judul: str, penulis: str, tahun: str, stok: int) -> tuple[bool, str]:
     books = load_books()
     new_id = get_next_book_id(books)
-    books.append({"id": new_id, "judul": judul, "penulis": penulis, "tahun": tahun, "stok": stok})
+    books.append({"id": new_id, "title": judul, "writer": penulis, "year": tahun, "stock": stok})
     save_books(books)
-    return True, "Buku berhasil ditambahkan."
+    return True, "Book successfully added"
 
 
 def update_book(book_id: int, judul: str, penulis: str, tahun: str, stok: int) -> tuple[bool, str]:
     books = load_books()
     for b in books:
         if int(b.get("id", 0)) == int(book_id):
-            b["judul"] = judul
-            b["penulis"] = penulis
-            b["tahun"] = tahun
-            b["stok"] = stok
+            b["title"] = judul
+            b["writer"] = penulis
+            b["year"] = tahun
+            b["stock"] = stok
             save_books(books)
-            return True, "Buku berhasil diperbarui."
-    return False, "Buku tidak ditemukan."
+            return True, "Book successfully added"
+    return False, "Book hasn't found"
 
 
 def delete_book(book_id: int) -> tuple[bool, str]:
     books = load_books()
     borrowings = load_borrowings()
     for p in borrowings:
-        if int(p.get("book_id", 0)) == int(book_id) and p.get("status") == "Dipinjam":
-            return False, "Buku tidak bisa dihapus karena sedang dipinjam."
+        if int(p.get("book_id", 0)) == int(book_id) and p.get("status") == "Borrowed":
+            return False, "Someone still borrowed the book"
     filtered = [b for b in books if int(b.get("id", 0)) != int(book_id)]
     if len(filtered) == len(books):
-        return False, "Buku tidak ditemukan."
+        return False, "Book hasn't found"
     save_books(filtered)
-    return True, "Buku berhasil dihapus."
+    return True, "Book successfully delete"
 
 
 def find_book(book_id: int):
@@ -196,8 +196,8 @@ def adjust_book_stock(book_id: int, delta: int) -> bool:
     books = load_books()
     for b in books:
         if int(b.get("id", 0)) == int(book_id):
-            b["stok"] = int(b.get("stok", 0)) + delta
-            if b["stok"] < 0:
+            b["stock"] = int(b.get("stock", 0)) + delta
+            if b["stock"] < 0:
                 return False
             save_books(books)
             return True
@@ -231,26 +231,26 @@ def get_next_borrowing_id(borrowings: list) -> int:
 def add_borrowing(username: str, book_id: int, tanggal_pinjam: str, tanggal_kembali: str) -> tuple[bool, str]:
     users = load_users()
     if username not in users:
-        return False, "Username tidak terdaftar."
+        return False, "Username unfound"
     book = find_book(book_id)
     if book is None:
-        return False, "Buku tidak ditemukan."
-    if int(book.get("stok", 0)) <= 0:
-        return False, "Stok buku habis."
+        return False, "Book hasn't found"
+    if int(book.get("stock", 0)) <= 0:
+        return False, "The book stock 0"
     borrowings = load_borrowings()
     new_id = get_next_borrowing_id(borrowings)
     borrowings.append({
         "id": new_id,
         "username": username,
         "book_id": int(book_id),
-        "judul": book.get("judul", ""),
-        "tanggal_pinjam": tanggal_pinjam,
-        "tanggal_kembali": tanggal_kembali,
-        "status": "Dipinjam",
+        "title": book.get("title", ""),
+        "date": tanggal_pinjam,
+        "duedate": tanggal_kembali,
+        "status": "Borrowed",
     })
     save_borrowings(borrowings)
     adjust_book_stock(book_id, -1)
-    return True, "Peminjaman berhasil ditambahkan."
+    return True, "Borrowing has been added"
 
 
 def update_borrowing(borrow_id: int, username: str, book_id: int, tanggal_pinjam: str, tanggal_kembali: str, status: str) -> tuple[bool, str]:
@@ -261,37 +261,37 @@ def update_borrowing(borrow_id: int, username: str, book_id: int, tanggal_pinjam
             target = p
             break
     if target is None:
-        return False, "Data peminjaman tidak ditemukan."
+        return False, "Borrowed data hasn't found"
     old_status = target.get("status")
     old_book_id = int(target.get("book_id", 0))
     new_book_id = int(book_id)
-    if old_status == "Dipinjam" and status == "Kembali" and old_book_id == new_book_id:
+    if old_status == "Borrowed" and status == "Back" and old_book_id == new_book_id:
         adjust_book_stock(old_book_id, 1)
-    elif old_status == "Kembali" and status == "Dipinjam":
+    elif old_status == "Back" and status == "Borrowed":
         book = find_book(new_book_id)
         if book is None:
-            return False, "Buku tidak ditemukan."
+            return False, "Book hasn't found"
         if int(book.get("stok", 0)) <= 0:
-            return False, "Stok buku habis."
+            return False, "The book stock 0"
         adjust_book_stock(new_book_id, -1)
-    elif old_book_id != new_book_id and old_status == "Dipinjam" and status == "Dipinjam":
+    elif old_book_id != new_book_id and old_status == "Borrowed" and status == "Borrowed":
         book = find_book(new_book_id)
         if book is None:
-            return False, "Buku tidak ditemukan."
+            return False, "Book hasn't found"
         if int(book.get("stok", 0)) <= 0:
-            return False, "Stok buku habis."
+            return False, "The book stock 0"
         adjust_book_stock(old_book_id, 1)
         adjust_book_stock(new_book_id, -1)
     target["username"] = username
     target["book_id"] = new_book_id
     book_now = find_book(new_book_id)
     if book_now is not None:
-        target["judul"] = book_now.get("judul", target.get("judul", ""))
-    target["tanggal_pinjam"] = tanggal_pinjam
-    target["tanggal_kembali"] = tanggal_kembali
+        target["title"] = book_now.get("title", target.get("title", ""))
+    target["date"] = tanggal_pinjam
+    target["duedate"] = tanggal_kembali
     target["status"] = status
     save_borrowings(borrowings)
-    return True, "Data peminjaman berhasil diperbarui."
+    return True, "Borrowed data updated successfully"
 
 
 def delete_borrowing(borrow_id: int) -> tuple[bool, str]:
@@ -302,12 +302,12 @@ def delete_borrowing(borrow_id: int) -> tuple[bool, str]:
             target = p
             break
     if target is None:
-        return False, "Data peminjaman tidak ditemukan."
-    if target.get("status") == "Dipinjam":
+        return False, "Borrowed data hasn't found"
+    if target.get("status") == "Borrowed":
         adjust_book_stock(int(target.get("book_id", 0)), 1)
     filtered = [p for p in borrowings if int(p.get("id", 0)) != int(borrow_id)]
     save_borrowings(filtered)
-    return True, "Data peminjaman berhasil dihapus."
+    return True, "Borrowed data has been delete."
 
 
 class HoverButton(tk.Button):
